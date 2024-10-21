@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
-from actividadclase.models import proyecto
-from . import forms
+from actividadclase.models import Proyecto
+from actividadclase.forms import Registrar
+#from django import index
 
 
 def inicio(request):
@@ -8,47 +9,36 @@ def inicio(request):
 
 
 def proyectodata(request):
-    proyectos=proyecto.objects.all()
+    proyectos=Proyecto.objects.all()
     data={'proyectos':proyectos}
     return render(request,'actividadclase/listado1.html',data)
 
-def registrar(request):
-    form = forms.registrar()  # Inicializa el formulario antes del bloque if
-
-    if request.method == 'POST':
-        form = forms.registrar(request.POST)  # Actualiza la instancia del formulario
+def registrarse(request):
+    form = Registrar()
+    if request.method=='POST':
+        form=Registrar(request.POST)
         if form.is_valid():
-            # Procesar los datos del formulario aquí
-            print("form es valido")
-            print("Nombre: ", form.cleaned_data['nombre'])
-            print("Fecha Inicio: ", form.cleaned_data['fecha_inicio'])
-            print("Fecha Termino: ", form.cleaned_data['fecha_termino'])  # Asegúrate de que esta línea sea correcta
-            print("Responsable: ", form.cleaned_data['responsable'])
-            print("Prioridad: ", form.cleaned_data['prioridad'])
-            # Aquí puedes guardar el proyecto en la base de datos si deseas
-            # Crear una nueva instancia del modelo proyecto y guardarla
-            nuevo_proyecto = proyecto(
-                nombre=form.cleaned_data['nombre'],
-                fecha_inicio=form.cleaned_data['fecha_inicio'],
-                fecha_termino=form.cleaned_data['fecha_termino'],
-                responsable=form.cleaned_data['responsable'],
-                prioridad=form.cleaned_data['prioridad']
-            )
-
-            nuevo_proyecto.save()
-            return redirect('/listado1')   # Guarda el proyecto en la base de datos
-
-    data = {'form': form}
+            form.save()
+        return proyectodata(request)
+    data={'form':form}
     return render(request, 'actividadclase/agregar.html', data)
 
+
 def eliminarProyecto(request, id):
-    proyecto_instance = proyecto.objects.get(id=id)
-    proyecto_instance.delete()  # Elimina el proyecto
+    proyecto_instance = Proyecto.objects.get(id=id)
+    proyecto_instance.delete() 
     return redirect('/listado1')  
 
-
-
-
+def actualizarproyecto(request, id):
+    proyecto=Proyecto.objects.get(id=id)
+    form=Registrar(instance=proyecto)
+    if request.method=='POST':
+        form=Registrar(request.POST,instance=proyecto)
+        if form.is_valid():
+            form.save()
+        return proyectodata(request)
+    data={'form':form}
+    return render(request, 'actividadclase/agregar.html',data)
 
 
 

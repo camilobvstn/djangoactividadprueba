@@ -18,13 +18,14 @@ from django.urls import path
 from actividadclase import views
 from actividadclase.views import inicio
 from actividadclase.views import proyectodata
-from actividadclase.views import registrar
+from actividadclase.views import registrarse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',inicio),
     path('listado1',proyectodata),
-   path('agregar',registrar),
+   path('agregar',registrarse),
    path('eliminarproyecto/<int:id>/', views.eliminarProyecto, name='eliminarProyecto'),
+   path('actualizarproyecto/<int:id>/', views.actualizarproyecto, name='actualizarProyecto'),
 
 ]
