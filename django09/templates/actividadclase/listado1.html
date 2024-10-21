@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>LISTADO DE PROYECTOS</h1>
+    {%if proyectos %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Termino</th>
+                <th>Responsable</th>
+                <th>Prioridad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pyt in proyectos %}
+            <tr>
+                <td>{{pyt.nombre}}</td>
+                <td>{{pyt.fecha_inicio}}</td>
+                <td>{{pyt.fecha_termino}}</td>
+                <td>{{pyt.responsable}}</td>
+                <td>{{pyt.prioridad}}</td>
+                <td><a href="/actualizarproyecto/{{pyt.id}}">Actualizar</a></td>
+                <td><a href="/eliminarproyecto/{{pyt.id}}">Eliminar</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div>No hay proyectos</div>
+    {% endif %}
+    <button onclick="window.location.href='http://127.0.0.1:8000/'">Volver</button>
+
+    <button onclick="window.location.href='http://127.0.0.1:8000/agregar'">AGREGAR PROYECTO</button>
+
+</body>
+</html>
